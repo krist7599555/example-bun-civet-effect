@@ -29,7 +29,9 @@ prisma .=
       session: ''
       expired_at: new Date()
 logger := console
+// ^?
 miniUserMask := {}
+// ^?
 
 function getSession(event: any)
   if not prisma
