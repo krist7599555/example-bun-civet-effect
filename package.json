@@ -1,0 +1,17 @@
+{
+  "name": "example-bun-civet-effect",
+  "module": "src/index.civet",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@danielx/civet": "^0.6.38",
+    "@effect/data": "^0.18.5",
+    "@effect/io": "^0.40.3",
+    "civetman": "^0.0.4"
+  }
+}

@@ -1,0 +1,81 @@
+* as Effect from '@effect/io/Effect'
+{ pipe } from '@effect/data/Function'
+
+data1 := pipe(
+  Effect.succeed(13 as const)
+  Effect.map((it) => it * 13)
+  Effect.map(&.toString())
+  Effect.runPromise
+)
+  |> await
+  |> (it) => it
+  |> console.log
+
+
+data2 := pipe(
+  Effect.succeed 13
+  Effect.map & * 13
+  Effect.map & * 13
+  Effect.map &.toString()
+  Effect.map (it) => [it, it, 'key', 13] as const
+  Effect.runPromise
+) |> await
+console.log data2
+
+prisma .=
+  authSession:
+    findUnique: (arg: any) => Promise.resolve
+      user: { name: 'krisy' }
+      session: ''
+      expired_at: new Date()
+logger := console
+miniUserMask := {}
+
+function getSession(event: any)
+  if not prisma
+    logger.info('create PrismaClient');
+    prisma = (new Error JSON.stringify
+      datasources:
+        db:
+          url: 'url'
+    ) as any
+
+  o := event?.cookies?.get?.('session') as string | undefined
+    |> Effect.fromNullable
+    |> (it) => Effect.flatMap(it, Effect.succeed)
+    |> .pipe
+      Effect.flatMap (session) => Effect.tryPromise
+        catch: => new Error("promise fail") as Error & { brand: "NOTFOUND" }
+        try: => prisma.authSession.findUnique
+            where:
+              session: session
+            select:
+              user:
+                select: miniUserMask
+              expired_at: true
+              session: true 
+      Effect.filterOrFail
+        &.expired_at < new Date()
+        => "EXPIRE" as const
+      Effect.match
+        onFailure: (fail) =>
+          prisma: 9
+          auth: undefined
+          authSession: undefined
+          reason: fail
+        onSuccess: (ok) =>
+          prisma: 9
+          auth: ok.user
+          authSession: ok.session
+          reason: undefined
+
+
+data3 := Effect.succeed
+  cookies:
+    get: => "NO VALUE"
+|> .pipe Effect.flatMap (it) => getSession(it)
+|> Effect.runPromise
+|> (it) => it
+|> await
+
+console.log data1, data2, data3
