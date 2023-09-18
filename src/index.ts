@@ -29,7 +29,9 @@ let prisma = {
   },
 }
 const logger = console
+// ^?
 const miniUserMask = {}
+// ^?
 
 function getSession(event: any) {
   if (!prisma) {
@@ -85,5 +87,18 @@ const data3 = await ((it) => it)(Effect.runPromise(Effect.succeed({
     get: () => "NO VALUE",
   },
 }).pipe(Effect.flatMap((it) => getSession(it)))))
+
+
+
+const emap = Effect.map;
+
+const { succeed } = Effect
+const m = ((s) => emap(s, (it) => ({ value: it })))(((s) => emap(s, (it) => ({ value: it })))(((s) => emap(s, (it) => ({ value: it })))(emap((emap((
+  pipe(
+  pipe(
+  pipe(pipe(13, ($5 => $5+1)), ($6 => $6.toString())), (succeed)), $7 => 
+  emap(
+  emap(
+  pipe(emap($7, ((it) => ['name', it.toUpperCase()] as const)), emap((it) => ({ value: it }))), ((it) => ({ value: it }))), ((it) => ({ value: it }))))), ((it) => ({ value: it })))), ((it) => ({ value: it }))))))
 
 console.log(data1, data2, data3)

@@ -80,4 +80,22 @@ data3 := Effect.succeed
 |> (it) => it
 |> await
 
+operator pipe
+
+operator emap := Effect.map
+
+{ succeed } := Effect
+m := 13 pipe (&+1) 
+  pipe (&.toString())
+  pipe (succeed)
+  pipe & emap ((it) => ['name', it.toUpperCase()] as const)
+  pipe emap((it) => ({ value: it }))
+  emap ((it) => ({ value: it }))
+  emap ((it) => ({ value: it }))
+  |> & emap ((it) => ({ value: it }))
+  |> & emap ((it) => ({ value: it }))
+  |> (s) => emap s, (it) => ({ value: it })
+  |> (s) => emap s, (it) => ({ value: it })
+  |> (s) => emap(s, (it) => ({ value: it }))
+
 console.log data1, data2, data3
